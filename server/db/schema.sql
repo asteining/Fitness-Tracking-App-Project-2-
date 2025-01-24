@@ -1,5 +1,5 @@
 -- DROP DATABASE
-DROP DATABASE IF EXISTS friends_db;
+DROP DATABASE IF EXISTS calories_exercise;
 
 -- CREATE DATABASE
-CREATE DATABASE friends_db;
+CREATE DATABASE calories_exercise;
