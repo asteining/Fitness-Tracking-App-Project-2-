@@ -1,28 +1,27 @@
 import express from 'express';
 import axios from 'axios';
-import type { Request, Response } from 'express';
 
 const router = express.Router();
-const WGER_API_BASE_URL = process.env.EXERCISE_API_BASE_URL || '';
-const WGER_API_KEY = process.env.EXERCISE_API_KEY || '';
 
-// GET /api/exercise/search/:query - Search exercises from wger API
-router.get('/search/:query', async (req: Request, res: Response) => {
-  const { query } = req.params;
+const EXERCISE_API_BASE_URL = 'https://api.api-ninjas.com/v1/caloriesburned?';
+const X_API_KEY = 'Zid3HT7e7n0hODsA3+zZwg==SjDYLrqn0IYRUQl2';
+
+router.get('/search', async (req, res) => {
+  const { activity, duration } = req.query;
+
   try {
-    const response = await axios.get(`${WGER_API_BASE_URL}/exercise`, {
-      params: { name: query },
+    const response = await axios.get(EXERCISE_API_BASE_URL, {
+      params: { activity, duration },
       headers: {
-        Authorization: `Token ${WGER_API_KEY}`,
+        'X-Api-Key': X_API_KEY,
       },
     });
 
-    res.json(response.data.results);
+    res.json(response.data);
   } catch (error: any) {
-    console.error('Error fetching exercises from wger:', error.message);
-    res.status(500).json({ message: error.message });
+    console.error('Error fetching calories burned data:', error.message);
+    res.status(error.response?.status || 500).json({ message: 'Failed to fetch data' });
   }
 });
 
-// Existing routes for local exercises...
 export { router as exerciseRouter };

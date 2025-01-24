@@ -1,45 +1,21 @@
-const retrieveLocalExercises = async () => {
+const searchCaloriesBurned = async (activity: string, duration: number = 60) => {
   try {
-    const response = await fetch('/api/exercise', {
+    const response = await fetch(`/api/exercise/search?activity=${activity}&duration=${duration}`, {
       headers: {
         'Content-Type': 'application/json',
+        'X-Api-Key': 'Zid3HT7e7n0hODsA3+zZwg==SjDYLrqn0IYRUQl2',
       },
     });
-    const data = await response.json();
 
     if (!response.ok) {
-      throw new Error('Failed to fetch local exercises. Check the network tab!');
+      throw new Error('Failed to fetch calories burned data from backend.');
     }
 
-    return data;
+    return await response.json();
   } catch (err) {
-    console.error('Error retrieving local exercises:', err);
-    return [];
+    console.error('Error retrieving calories burned data:', err);
+    throw err;
   }
 };
 
-const searchWgerExercises = async (query: string) => {
-  try {
-    const response = await fetch(
-      `https://wger.de/api/v2/exercise/?name=${query}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Token ${process.env.EXERCISE_API_KEY}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch exercises from wger API');
-    }
-
-    const data = await response.json();
-    return data.results;
-  } catch (err) {
-    console.error('Error retrieving wger exercises:', err);
-    return [];
-  }
-};
-
-export { retrieveLocalExercises, searchWgerExercises };
+export { searchCaloriesBurned };

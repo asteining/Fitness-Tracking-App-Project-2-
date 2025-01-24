@@ -1,21 +1,19 @@
 import { DataTypes, type Sequelize, Model, type Optional } from 'sequelize';
 
 interface ExerciseAttributes {
-  id: number;
-  exerciseType: string;
-  hoursPerformed: number;
+  activity: string;
+  duration: number;
   caloriesBurned: number;
 }
 
-interface ExerciseCreationAttributes extends Optional<ExerciseAttributes, 'id'> {}
+interface ExerciseCreationAttributes extends Optional<ExerciseAttributes, 'activity'> {}
 
 export class Exercise
   extends Model<ExerciseAttributes, ExerciseCreationAttributes>
   implements ExerciseAttributes
 {
-  public id!: number;
-  public exerciseType!: string;
-  public hoursPerformed!: number;
+  public activity!: string;
+  public duration!: number;
   public caloriesBurned!: number;
 
   public readonly createdAt!: Date;
@@ -26,16 +24,11 @@ export class Exercise
 export function ExerciseFactory(sequelize: Sequelize): typeof Exercise {
   Exercise.init(
     {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      exerciseType: {
+      activity: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      hoursPerformed: {
+      duration: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -47,14 +40,7 @@ export function ExerciseFactory(sequelize: Sequelize): typeof Exercise {
     {
       tableName: 'exercises',
       sequelize,
-      // hooks: {
-      //   beforeCreate: async (user: User) => {
-      //     await user.setPassword(user.password);
-      //   },
-      //   beforeUpdate: async (user: User) => {
-      //     await user.setPassword(user.password);
-      //   },
-      // },
+    
     }
   );
 

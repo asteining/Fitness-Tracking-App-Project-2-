@@ -1,76 +1,59 @@
-import { useState, useEffect } from 'react';
-import { retrieveLocalExercises, searchWgerExercises } from '../api/exerciseAPI';
+import { useState } from 'react';
+import { searchCaloriesBurned } from '../api/exerciseAPI';
+
+interface Exercise {
+  activity: string;
+  duration: number;
+  caloriesBurned: number;
+}
 
 const ExercisePage = () => {
-  const [localExercises, setLocalExercises] = useState<
-  { id: number; exerciseType: string; hoursPerformed: number; caloriesBurned: number; }[]>([]);
-  
-  const [searchResults, setSearchResults] = useState<{ id: number; name: string; description: string; }[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    const fetchLocalExercises = async () => {
-      try {
-        const exercises = await retrieveLocalExercises();
-        setLocalExercises(exercises);
-      } catch {
-        setError(true);
-      }
-    };
-
-    fetchLocalExercises();
-  }, []);
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<Exercise[]>([]);
+  const [error, setError] = useState('');
 
   const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
+    if (!query.trim()) return;
 
     try {
-      const results = await searchWgerExercises(searchQuery);
-      setSearchResults(results);
-    } catch {
-      setError(true);
+      const data = await searchCaloriesBurned(query);
+      setResults(
+        data.map((item: { name: string; duration_minutes: number; total_calories: number }) => ({
+          activity: item.name,
+          duration: item.duration_minutes,
+          caloriesBurned: item.total_calories,
+        }))
+      );
+      setError('');
+    } catch (err) {
+      setError('Failed to fetch exercise data');
     }
   };
 
-  if (error) {
-    return <p>Error loading exercises. Please try again later.</p>;
-  }
+  const handleDelete = (activity: string) => {
+    setResults(results.filter((exercise) => exercise.activity !== activity));
+  };
 
   return (
     <div className="exercise-page">
-      <h1>Exercise Tracker</h1>
-
-      {/* Search Bar */}
+      <h1>Search for Exercises</h1>
       <div className="search-bar">
         <input
           type="text"
-          placeholder="Search exercises..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Enter exercise name"
         />
         <button onClick={handleSearch}>Search</button>
       </div>
-
-      {/* Search Results */}
-      <div className="search-results">
-        <h2>Search Results</h2>
-        {searchResults.map((exercise) => (
-          <div key={exercise.id} className="exercise-item">
-            <h3>{exercise.name}</h3>
-            <p>{exercise.description}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Local Exercises */}
-      <div className="local-exercises">
-        <h2>Logged Exercises</h2>
-        {localExercises.map((exercise) => (
-          <div key={exercise.id} className="exercise-item">
-            <h3>{exercise.exerciseType}</h3>
-            <p>Duration: {exercise.hoursPerformed} hrs</p>
+      {error && <p className="error">{error}</p>}
+      <div className="exercise-results">
+        {results.map((exercise, index) => (
+          <div key={index} className="exercise-item">
+            <h3>{exercise.activity}</h3>
+            <p>Duration: {exercise.duration} minutes</p>
             <p>Calories Burned: {exercise.caloriesBurned}</p>
+            <button onClick={() => handleDelete(exercise.activity)}>Delete</button>
           </div>
         ))}
       </div>
