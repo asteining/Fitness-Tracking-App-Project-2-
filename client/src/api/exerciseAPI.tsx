@@ -1,116 +1,45 @@
-import { ApiMessage } from "../interfaces/ApiMessage";
-import { ExerciseData } from "../interfaces/ExerciseData";
-
-const retrieveExercise = async () => {
+const retrieveLocalExercises = async () => {
   try {
     const response = await fetch('/api/exercise', {
       headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    const data = await response.json();
-
-    if(!response.ok) {
-      throw new Error('invalid volunteer API response, check network tab!');
-    }
-
-    return data;
-  } catch (err) {
-    console.log('Error from data retrieval:', err);
-    return [];
-  }  
-};
-
-const retrieveVolunteer = async (id: number | null): Promise<ExerciseData> => {
-  try {
-    const response = await fetch(`/api/volunteers/${id}`, {
-      headers: {
         'Content-Type': 'application/json',
-      }
+      },
     });
     const data = await response.json();
-    if(!response.ok) {
-      throw new Error('invalid volunteer API response, check network tab!');
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch local exercises. Check the network tab!');
     }
 
     return data;
   } catch (err) {
-    console.log('Error from data retrieval:', err);
-    return Promise.reject('Could not fetch volunteer');
+    console.error('Error retrieving local exercises:', err);
+    return [];
   }
 };
 
-const createVolunteer = async (body: VolunteerData): Promise<VolunteerData> => {
+const searchWgerExercises = async (query: string) => {
   try {
     const response = await fetch(
-      '/api/volunteers/', {
-        method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        body: JSON.stringify(body)
-      }
-
-    )
-    const data = response.json();
-
-    if(!response.ok) {
-      throw new Error('invalid API response, check network tab!');
-    }
-
-    return data;
-
-  } catch (err) {
-    console.log('Error from Volunteer Creation: ', err);
-    return Promise.reject('Could not create Volunteer');
-  }
-};
-
-const updateVolunteers = async (id: number, body: VolunteerData): Promise<VolunteerData> => {
-  try {
-    const response = await fetch(
-      `/api/volunteers/${id}`, {
-        method: 'PUT',
+      `https://wger.de/api/v2/exercise/?name=${query}`,
+      {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Token ${process.env.EXERCISE_API_KEY}`,
         },
-        body: JSON.stringify(body)
       }
-    )
-    const data = await response.json();
+    );
 
-    if(!response.ok) {
-      throw new Error('invalid API response, check network tab!');
+    if (!response.ok) {
+      throw new Error('Failed to fetch exercises from wger API');
     }
 
-    return data;
+    const data = await response.json();
+    return data.results;
   } catch (err) {
-    console.error('Update did not work', err);
-    return Promise.reject('Update did not work');
+    console.error('Error retrieving wger exercises:', err);
+    return [];
   }
 };
 
-const deleteVolunteer = async (id: number): Promise<ApiMessage> => {
-  try {
-    const response = await fetch(
-      `/api/volunteers/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-    const data = await response.json();
-
-    if(!response.ok) {
-      throw new Error('invalid API response, check network tab!');
-    }
-
-    return data;
-  } catch (err) {
-    console.error('Error in deleting volunteer', err);
-    return Promise.reject('Could not delete volunteer');
-  }
-};
-
-export { retrieveExercise, retrieveVolunteer, createVolunteer, updateVolunteers, deleteVolunteer };
+export { retrieveLocalExercises, searchWgerExercises };

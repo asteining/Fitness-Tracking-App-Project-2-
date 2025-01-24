@@ -1,0 +1,280 @@
+/* Base Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', Arial, sans-serif; /* Clean font for readability */
+  font-size: 16px;
+  color: #333; /* Dark gray for text */
+  background-color: #f4f6f8; /* Light gray background for a clean look */
+}
+
+a {
+  text-decoration: none;
+  color: #0077cc; /* MyFitnessPal blue */
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  color: #005499; /* Slightly darker blue for hover effect */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #2c3e50; /* Darker gray for headings */
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* Containers and Layout */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-center {
+  align-items: center;
+  justify-content: center;
+}
+
+.grid {
+  display: grid;
+  grid-gap: 1.5rem;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+}
+
+.btn-primary {
+  background-color: #0077cc;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #005499;
+}
+
+.btn-secondary {
+  background-color: #f4f6f8;
+  color: #0077cc;
+  border: 1px solid #0077cc;
+}
+
+.btn-secondary:hover {
+  background-color: #e1e8ee;
+}
+
+.btn-danger {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* Inputs */
+input[type='text'],
+input[type='search'],
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #0077cc;
+  box-shadow: 0 0 4px rgba(0, 119, 204, 0.5);
+}
+
+/* Card Styling */
+.card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.card-body {
+  font-size: 1rem;
+  color: #666;
+}
+
+.card-footer {
+  margin-top: 1rem;
+  text-align: right;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #0077cc;
+  color: #fff;
+}
+
+.table tbody tr:hover {
+  background-color: #f4f6f8;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #0077cc;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
+.navbar a {
+  color: #fff;
+  margin-left: 1rem;
+}
+
+.navbar a:hover {
+  color: #e1e8ee;
+}
+
+/* FoodPage */
+.food-page {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+}
+
+.search-bar {
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+
+.search-bar input {
+  border-radius: 5px 0 0 5px;
+  border-right: none;
+  flex: 1;
+}
+
+.search-bar button {
+  border-radius: 0 5px 5px 0;
+}
+
+.food-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f4f6f8;
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.food-item h3 {
+  font-size: 1.25rem;
+}
+
+.food-item p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.food-item button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+}
+
+.food-item button:hover {
+  background-color: #c0392b;
+}
