@@ -3,7 +3,7 @@ import { DataTypes, type Sequelize, Model, type Optional } from 'sequelize';
 interface ExerciseAttributes {
   id: number;
   exerciseType: string;
-  hoursPerformed: number;
+  hoursPreformed: number;
   caloriesBurned: number;
 }
 
@@ -15,7 +15,7 @@ export class Exercise
 {
   public id!: number;
   public exerciseType!: string;
-  public hoursPerformed!: number;
+  public hoursPreformed!: number;
   public caloriesBurned!: number;
 
   public readonly createdAt!: Date;
@@ -35,7 +35,7 @@ export function ExerciseFactory(sequelize: Sequelize): typeof Exercise {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      hoursPerformed: {
+      hoursPreformed: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
