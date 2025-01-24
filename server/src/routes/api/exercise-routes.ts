@@ -1,16 +1,16 @@
 import express from 'express';
 import type { Request, Response } from 'express';
-import { User } from '../../models/index.js';
+import { Exercise } from '../../models/index.js';
 
 const router = express.Router();
 
 // GET /users - Get all users
 router.get('/', async (_req: Request, res: Response) => {
   try {
-    const users = await User.findAll({
-      attributes: { exclude: ['password'] }
+    const exercises = await Exercise.findAll({
+      attributes: { exclude: [' '] }
     });
-    res.json(users);
+    res.json(exercises);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -20,43 +20,44 @@ router.get('/', async (_req: Request, res: Response) => {
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const user = await User.findByPk(id, {
+    const exercise = await Exercise.findByPk(id, {
       attributes: { exclude: ['password'] }
     });
-    if (user) {
-      res.json(user);
+    if (exercise) {
+      res.json(exercise);
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'Exercise not found' });
     }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// POST /users - Create a new user
+// POST /users - 
 router.post('/', async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
+  const { exerciseType, caloriesBurned, hoursPerformed } = req.body;
   try {
-    const newUser = await User.create({ username, email, password });
-    res.status(201).json(newUser);
+    const newExercise = await Exercise.create({ exerciseType, caloriesBurned, hoursPerformed });
+    res.status(201).json(newExercise);
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
 });
 
-// PUT /users/:id - Update a user by id
+// PUT /exercise/:id - Update a exercise by id
 router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { username, password } = req.body;
+  const { exerciseType, caloriesBurned, hoursPerformed  } = req.body;
   try {
-    const user = await User.findByPk(id);
-    if (user) {
-      user.username = username;
-      user.password = password;
-      await user.save();
-      res.json(user);
+    const exercise = await Exercise.findByPk(id);
+    if (exercise) {
+      exercise.exerciseType = exerciseType;
+      exercise.caloriesBurned = caloriesBurned;
+      exercise.hoursPerformed = hoursPerformed;
+      await exercise.save();
+      res.json(exercise);
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'Exercise not found' });
     }
   } catch (error: any) {
     res.status(400).json({ message: error.message });
@@ -67,16 +68,16 @@ router.put('/:id', async (req: Request, res: Response) => {
 router.delete('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const user = await User.findByPk(id);
-    if (user) {
-      await user.destroy();
-      res.json({ message: 'User deleted' });
+    const exercise = await Exercise.findByPk(id);
+    if (exercise) {
+      await exercise.destroy();
+      res.json({ message: 'Exercise deleted' });
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'Exercise not found' });
     }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 });
 
-export { router as userRouter };
+export { router as exerciseRouter };

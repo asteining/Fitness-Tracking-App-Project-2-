@@ -1,5 +1,4 @@
 import { DataTypes, type Sequelize, Model, type Optional } from 'sequelize';
-import bcrypt from 'bcrypt';
 
 interface ExerciseAttributes {
   id: number;
@@ -26,7 +25,7 @@ export class Exercise
 
 }
 
-export function UserFactory(sequelize: Sequelize): typeof Exercise {
+export function ExerciseFactory(sequelize: Sequelize): typeof Exercise {
   Exercise.init(
     {
       id: {
