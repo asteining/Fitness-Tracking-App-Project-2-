@@ -47,7 +47,7 @@ const Home = () => {
                 !loginCheck ? (
                     <div className='login-notice'>
                         <h1>
-                            Login to view all your friends!
+                            Search a Food to track your calories!
                         </h1>
                     </div>
                 ) : (
