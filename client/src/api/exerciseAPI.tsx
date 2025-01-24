@@ -3,7 +3,7 @@ import { ExerciseData } from "../interfaces/ExerciseData";
 
 const retrieveExercise = async () => {
   try {
-    const response = await fetch('/api/volunteers', {
+    const response = await fetch('/api/exercise', {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -113,4 +113,4 @@ const deleteVolunteer = async (id: number): Promise<ApiMessage> => {
   }
 };
 
-export { retrieveVolunteer, retrieveVolunteers, createVolunteer, updateVolunteers, deleteVolunteer };
+export { retrieveExercise, retrieveVolunteer, createVolunteer, updateVolunteers, deleteVolunteer };
