@@ -1,68 +1,57 @@
 import { DataTypes, type Sequelize, Model, type Optional } from 'sequelize';
-import bcrypt from 'bcrypt';
 
-interface UserAttributes {
+interface FoodAttributes {
   id: number;
-  username: string;
-  email: string;
-  password: string;
+  Servings: number;
+  Calories: number;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+interface FoodCreationAttributes extends Optional<FoodAttributes, 'id'> {}
 
-export class User
-  extends Model<UserAttributes, UserCreationAttributes>
-  implements UserAttributes
+export class Food
+  extends Model<FoodAttributes, FoodCreationAttributes>
+  implements FoodAttributes
 {
   public id!: number;
-  public username!: string;
-  public email!: string;
-  public password!: string;
+  public Servings!: number;
+  public Calories!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  // Hash the password before saving the user
-  public async setPassword(password: string) {
-    const saltRounds = 10;
-    this.password = await bcrypt.hash(password, saltRounds);
-  }
 }
 
-export function UserFactory(sequelize: Sequelize): typeof User {
-  User.init(
+export function FoodFactory(sequelize: Sequelize): typeof Food {
+  Food.init(
     {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
       },
-      username: {
-        type: DataTypes.STRING,
+      Servings: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
-      email: {
-        type: DataTypes.STRING,
+      Calories: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
+    
       },
     },
     {
-      tableName: 'users',
+      tableName: 'foods',
       sequelize,
-      hooks: {
-        beforeCreate: async (user: User) => {
-          await user.setPassword(user.password);
-        },
-        beforeUpdate: async (user: User) => {
-          await user.setPassword(user.password);
-        },
-      },
+      // hooks: {
+      //   beforeCreate: async (user: User) => {
+      //     await user.setPassword(user.password);
+      //   },
+      //   beforeUpdate: async (user: User) => {
+      //     await user.setPassword(user.password);
+      //   },
+      // },
     }
   );
 
-  return User;
+  return Food;
 }
