@@ -1,24 +1,116 @@
-import Auth from '../utils/auth';
+import { ApiMessage } from "../interfaces/ApiMessage";
+import { ExerciseData } from "../interfaces/ExerciseData";
 
-const retrieveExercises = async () => {
+const retrieveExercise = async () => {
   try {
     const response = await fetch('/api/exercise', {
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Auth.getToken()}`,
-      },
+        'Content-Type': 'application/json'
+      }
     });
     const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error('invalid user API response, check network tab!');
+    if(!response.ok) {
+      throw new Error('invalid volunteer API response, check network tab!');
     }
 
     return data;
   } catch (err) {
     console.log('Error from data retrieval:', err);
     return [];
+  }  
+};
+
+const retrieveVolunteer = async (id: number | null): Promise<ExerciseData> => {
+  try {
+    const response = await fetch(`/api/volunteers/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    const data = await response.json();
+    if(!response.ok) {
+      throw new Error('invalid volunteer API response, check network tab!');
+    }
+
+    return data;
+  } catch (err) {
+    console.log('Error from data retrieval:', err);
+    return Promise.reject('Could not fetch volunteer');
   }
 };
 
-export { retrieveExercises };
+const createVolunteer = async (body: VolunteerData): Promise<VolunteerData> => {
+  try {
+    const response = await fetch(
+      '/api/volunteers/', {
+        method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        body: JSON.stringify(body)
+      }
+
+    )
+    const data = response.json();
+
+    if(!response.ok) {
+      throw new Error('invalid API response, check network tab!');
+    }
+
+    return data;
+
+  } catch (err) {
+    console.log('Error from Volunteer Creation: ', err);
+    return Promise.reject('Could not create Volunteer');
+  }
+};
+
+const updateVolunteers = async (id: number, body: VolunteerData): Promise<VolunteerData> => {
+  try {
+    const response = await fetch(
+      `/api/volunteers/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+      }
+    )
+    const data = await response.json();
+
+    if(!response.ok) {
+      throw new Error('invalid API response, check network tab!');
+    }
+
+    return data;
+  } catch (err) {
+    console.error('Update did not work', err);
+    return Promise.reject('Update did not work');
+  }
+};
+
+const deleteVolunteer = async (id: number): Promise<ApiMessage> => {
+  try {
+    const response = await fetch(
+      `/api/volunteers/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+    const data = await response.json();
+
+    if(!response.ok) {
+      throw new Error('invalid API response, check network tab!');
+    }
+
+    return data;
+  } catch (err) {
+    console.error('Error in deleting volunteer', err);
+    return Promise.reject('Could not delete volunteer');
+  }
+};
+
+export { retrieveExercise, retrieveVolunteer, createVolunteer, updateVolunteers, deleteVolunteer };
