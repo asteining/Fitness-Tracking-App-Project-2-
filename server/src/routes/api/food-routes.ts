@@ -1,82 +1,74 @@
 import express from 'express';
+import axios from 'axios';
 import type { Request, Response } from 'express';
-import { User } from '../../models/index.js';
+import { Food } from '../../models/index.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const router = express.Router();
+const USDA_API_BASE_URL = process.env.USDA_API_BASE_URL;
 
-// GET /users - Get all users
-router.get('/', async (_req: Request, res: Response) => {
+
+// GET /food/:id - Get a food by FDC ID
+router.get('/:fdcid', async (req: Request, res: Response) => {
+  const { fdcid } = req.params; // Use `id` to match the route parameter
   try {
-    const users = await User.findAll({
-      attributes: { exclude: ['password'] }
-    });
-    res.json(users);
+    // Check if food exists in the local database
+    const food = await Food.findByPk(fdcid);
+
+    if (!food) {
+      // Fetch food details from USDA API
+      const apiResponse = await axios.get(`${USDA_API_BASE_URL}/food/${fdcid}`, {
+        params: {
+          api_key: `fOL9TmHn6ShQscBanrO1tUo7szJWSufyu1VszmXY`, // Use the USDA API key
+          nutrients: 208, // Only fetch calories
+        },
+      });
+
+      if (apiResponse.data) {
+        // Extract calories information
+        const calories = apiResponse.data.foodNutrients?.find(
+          (n: any) => n.nutrientName === 'Energy'
+        )?.value || 208;
+
+        // Save to local database
+        const newFood = await Food.create({
+          fdcid: apiResponse.data.fdcId,
+          Nutrients: calories,
+        });
+
+        res.json(newFood); // Return the newly saved food
+        return;
+      }
+
+      res.status(404).json({ message: 'Food not found in USDA API' });
+      return;
+    }
+
+    // Return food from local database
+    res.json(food);
   } catch (error: any) {
+    console.error('Error fetching food:', error);
     res.status(500).json({ message: error.message });
   }
 });
 
-// GET /users/:id - Get a user by id
-router.get('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
+// DELETE /food/:id - Delete a food by FDC ID
+router.delete('/:fdcid', async (req: Request, res: Response) => {
+  const { fdcid } = req.params;
   try {
-    const user = await User.findByPk(id, {
-      attributes: { exclude: ['password'] }
-    });
-    if (user) {
-      res.json(user);
+    const food = await Food.findByPk(fdcid);
+
+    if (food) {
+      await food.destroy();
+      res.json({ message: 'Food deleted' });
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'Food not found' });
     }
   } catch (error: any) {
+    console.error('Error deleting food:', error);
     res.status(500).json({ message: error.message });
   }
 });
 
-// POST /users - Create a new user
-router.post('/', async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
-  try {
-    const newUser = await User.create({ username, email, password });
-    res.status(201).json(newUser);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// PUT /users/:id - Update a user by id
-router.put('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { username, password } = req.body;
-  try {
-    const user = await User.findByPk(id);
-    if (user) {
-      user.username = username;
-      user.password = password;
-      await user.save();
-      res.json(user);
-    } else {
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// DELETE /users/:id - Delete a user by id
-router.delete('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const user = await User.findByPk(id);
-    if (user) {
-      await user.destroy();
-      res.json({ message: 'User deleted' });
-    } else {
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-export { router as userRouter };
+export { router as foodRouter };

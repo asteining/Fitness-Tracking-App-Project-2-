@@ -6,10 +6,10 @@ import Auth from '../utils/auth';
  * @param query - The FDC ID of the food item to search for.
  * @returns The food data from the backend.
  */
-export const searchFood = async (query: string) => {
+export const searchFood = async (fdcid: number) => {
   try {
     // Make a GET request to search for food by FDC ID
-    const response = await axios.get(`/api/food/${query}`, {
+    const response = await axios.get(`/api/food/${fdcid}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${Auth.getToken() || ''}`, // Ensure token is included
@@ -27,10 +27,10 @@ export const searchFood = async (query: string) => {
  * Delete a food item by its ID.
  * @param id - The ID of the food item to delete.
  */
-export const deleteFood = async (id: string) => {
+export const deleteFood = async (fdcid: number) => {
   try {
     // Make a DELETE request to remove the food item
-    await axios.delete(`/api/food/${id}`, {
+    await axios.delete(`/api/food/${fdcid}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${Auth.getToken() || ''}`, // Ensure token is included

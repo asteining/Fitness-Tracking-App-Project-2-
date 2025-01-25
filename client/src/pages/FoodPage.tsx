@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { searchFood, deleteFood } from '../api/foodAPI';
 
 interface Food {
-    id: string;
-    name: string;
-    Calories: number;
+    fdcid: number;
+    Nutrients: number; // Calories
     }
 
 const FoodPage = () => {
@@ -13,8 +12,14 @@ const FoodPage = () => {
   const [error, setError] = useState('');
 
   const handleSearch = async () => {
+    const fdcid = Number(query); // Convert query to number
+    if (isNaN(fdcid)) {
+      setError('Invalid FDC ID');
+      return;
+    }
+
     try {
-      const data = await searchFood(query);
+      const data = await searchFood(fdcid);
       setResults(data);
       setError('');
     } catch (err) {
@@ -22,10 +27,10 @@ const FoodPage = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (fdcid: number) => {
     try {
-      await deleteFood(id);
-      setResults(results.filter((food) => food.id !== id));
+      await deleteFood(fdcid);
+      setResults(results.filter((food) => food.fdcid !== fdcid));
     } catch (err) {
       setError('Failed to delete food');
     }
@@ -46,10 +51,10 @@ const FoodPage = () => {
       {error && <p className="error">{error}</p>}
       <div className="food-results">
         {results.map((food) => (
-          <div key={food.id} className="food-item">
-            <h3>{food.name}</h3>
-            <p>Calories: {food.Calories}</p>
-            <button onClick={() => handleDelete(food.id)}>Delete</button>
+          <div key={food.fdcid} className="food-item">
+            <h3>{food.fdcid}</h3>
+            <p>Calories: {food.Nutrients}</p>
+            <button onClick={() => handleDelete(food.fdcid)}>Delete</button>
           </div>
         ))}
       </div>
