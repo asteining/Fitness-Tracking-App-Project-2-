@@ -1,18 +1,18 @@
 import axios from 'axios';
-import Auth from '../utils/auth';
+import dotenv from 'dotenv';
 
-/**
- * Search for a food by FDC ID.
- * @param query - The FDC ID of the food item to search for.
- * @returns The food data from the backend.
- */
+dotenv.config
+
+const api_key = 'fOL9TmHn6ShQscBanrO1tUo7szJWSufyu1VszmXY';
+
 export const searchFood = async (fdcid: number) => {
   try {
     // Make a GET request to search for food by FDC ID
-    const response = await axios.get(`/api/food/${fdcid}`, {
+    const response = await axios.get(`https://api.nal.usda.gov/fdc/v1/food/${fdcid}?api_key=${api_key}`, {
       headers: {
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${Auth.getToken() || ''}`, // Ensure token is included
+        
       },
     });
     return response.data;
@@ -23,17 +23,15 @@ export const searchFood = async (fdcid: number) => {
   }
 };
 
-/**
- * Delete a food item by its ID.
- * @param id - The ID of the food item to delete.
- */
+
 export const deleteFood = async (fdcid: number) => {
   try {
     // Make a DELETE request to remove the food item
-    await axios.delete(`/api/food/${fdcid}`, {
+    await axios.delete(`https://api.nal.usda.gov/fdc/v1/food/:${fdcid}`, {
       headers: {
+        'Accept': '*/*',
+        'Host': 'https://api.nal.usda.gov',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${Auth.getToken() || ''}`, // Ensure token is included
       },
     });
   } catch (error) {

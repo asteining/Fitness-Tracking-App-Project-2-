@@ -20,8 +20,8 @@ const FoodPage = () => {
 
     try {
       const data = await searchFood(fdcid);
-      setResults(data);
-      setError('');
+      if (data) {setResults(data); setError('');}
+      
     } catch (err) {
       setError('Failed to fetch food data');
     }
@@ -50,7 +50,7 @@ const FoodPage = () => {
       </div>
       {error && <p className="error">{error}</p>}
       <div className="food-results">
-        {results.map((food) => (
+        {results && results.map((food) => (
           <div key={food.fdcid} className="food-item">
             <h3>{food.fdcid}</h3>
             <p>Calories: {food.Nutrients}</p>

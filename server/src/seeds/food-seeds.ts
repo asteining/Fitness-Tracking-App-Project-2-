@@ -6,7 +6,7 @@ export const seedFoods = async () => {
       { fdcid: 1662353, // chicken 
         Nutrients: 208, }, // calories
       {
-        fdcid: 168727, // steak?
+        fdcid: 168727, // steak
         Nutrients: 208, // calories
       },
       {
