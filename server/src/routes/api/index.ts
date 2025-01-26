@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { userRouter } from './user-routes.js';
 import { exerciseRouter } from './exercise-routes.js';
-import { foodRouter } from './food-api.js';
+import { foodRouter } from './food-routes.js';
 
 const router = Router();
 

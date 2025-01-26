@@ -1,82 +1,41 @@
 import express from 'express';
-import type { Request, Response } from 'express';
-import { User } from '../../models/index.js';
+import axios from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const router = express.Router();
 
-// GET /users - Get all users
-router.get('/', async (_req: Request, res: Response) => {
+const EXERCISE_API_BASE_URL = 'https://api.nal.usda.gov/fdc/v1/food/:fdcId?';
+
+router.get('/search', async (req, res) => {
+  const {fdcid, api_key, nutrients } = req.query;
+  {
+    if (!api_key) {
+      return res.status(400).json({ message: 'API key is required' });
+    }
+  }
+  if (!fdcid) {
+    return res.status(400).json({ message: 'Activity is required' });
+  }
+  if (!nutrients || isNaN(Number(nutrients))) {
+    return res.status(400).json({ message: 'Valid duration is required' });
+  }
+
   try {
-    const users = await User.findAll({
-      attributes: { exclude: ['password'] }
+    const response = await axios.get(EXERCISE_API_BASE_URL, {
+      params: { api_key, nutrients },
+      headers: {
+        'Accept': '*/*',
+        'Host': 'https://api.nal.usda.gov',
+        'Content-Type': 'application/json',
+      },
     });
-    res.json(users);
+
+    return res.json(response.data);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error('Error fetching calories burned data:', error.response?.data || error.message);
+    return res.status(error.response?.status || 500).json({ message: 'Failed to fetch data' });
   }
 });
 
-// GET /users/:id - Get a user by id
-router.get('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const user = await User.findByPk(id, {
-      attributes: { exclude: ['password'] }
-    });
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// POST /users - Create a new user
-router.post('/', async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
-  try {
-    const newUser = await User.create({ username, email, password });
-    res.status(201).json(newUser);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// PUT /users/:id - Update a user by id
-router.put('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { username, password } = req.body;
-  try {
-    const user = await User.findByPk(id);
-    if (user) {
-      user.username = username;
-      user.password = password;
-      await user.save();
-      res.json(user);
-    } else {
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// DELETE /users/:id - Delete a user by id
-router.delete('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const user = await User.findByPk(id);
-    if (user) {
-      await user.destroy();
-      res.json({ message: 'User deleted' });
-    } else {
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-export { router as userRouter };
+export { router as foodRouter };
