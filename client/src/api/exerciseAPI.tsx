@@ -1,9 +1,9 @@
 import { ApiMessage } from "../interfaces/ApiMessage";
 import { ExerciseData } from "../interfaces/ExerciseData";
 
-const retrieveExercise = async () => {
+const retrieveExercises = async () => {
   try {
-    const response = await fetch('/api/exercise', {
+    const response = await fetch('/api/exercises', {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -11,7 +11,7 @@ const retrieveExercise = async () => {
     const data = await response.json();
 
     if(!response.ok) {
-      throw new Error('invalid volunteer API response, check network tab!');
+      throw new Error('invalid exercise API response, check network tab!');
     }
 
     return data;
@@ -21,29 +21,29 @@ const retrieveExercise = async () => {
   }  
 };
 
-const retrieveVolunteer = async (id: number | null): Promise<ExerciseData> => {
+const retrieveExercise = async (id: number | null): Promise<ExerciseData> => {
   try {
-    const response = await fetch(`/api/volunteers/${id}`, {
+    const response = await fetch(`/api/exercises/${id}`, {
       headers: {
         'Content-Type': 'application/json',
       }
     });
     const data = await response.json();
     if(!response.ok) {
-      throw new Error('invalid volunteer API response, check network tab!');
+      throw new Error('invalid exercise API response, check network tab!');
     }
 
     return data;
   } catch (err) {
     console.log('Error from data retrieval:', err);
-    return Promise.reject('Could not fetch volunteer');
+    return Promise.reject('Could not fetch exercise');
   }
 };
 
-const createVolunteer = async (body: VolunteerData): Promise<VolunteerData> => {
+const createExercise = async (body: ExerciseData): Promise<ExerciseData> => {
   try {
     const response = await fetch(
-      '/api/volunteers/', {
+      '/api/exercises/', {
         method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -61,15 +61,15 @@ const createVolunteer = async (body: VolunteerData): Promise<VolunteerData> => {
     return data;
 
   } catch (err) {
-    console.log('Error from Volunteer Creation: ', err);
-    return Promise.reject('Could not create Volunteer');
+    console.log('Error from Exercise Creation: ', err);
+    return Promise.reject('Could not create Exercise');
   }
 };
 
-const updateVolunteers = async (id: number, body: VolunteerData): Promise<VolunteerData> => {
+const updateExercises = async (id: number, body: ExerciseData): Promise<ExerciseData> => {
   try {
     const response = await fetch(
-      `/api/volunteers/${id}`, {
+      `/api/exercises/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -90,10 +90,10 @@ const updateVolunteers = async (id: number, body: VolunteerData): Promise<Volunt
   }
 };
 
-const deleteVolunteer = async (id: number): Promise<ApiMessage> => {
+const deleteExercise = async (id: number): Promise<ApiMessage> => {
   try {
     const response = await fetch(
-      `/api/volunteers/${id}`, {
+      `/api/exercises/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -108,9 +108,9 @@ const deleteVolunteer = async (id: number): Promise<ApiMessage> => {
 
     return data;
   } catch (err) {
-    console.error('Error in deleting volunteer', err);
-    return Promise.reject('Could not delete volunteer');
+    console.error('Error in deleting exercise', err);
+    return Promise.reject('Could not delete exercise');
   }
 };
 
-export { retrieveExercise, retrieveVolunteer, createVolunteer, updateVolunteers, deleteVolunteer };
+export { retrieveExercises, retrieveExercise, createExercise, updateExercises, deleteExercise };
