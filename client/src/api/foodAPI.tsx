@@ -24,19 +24,4 @@ export const searchFood = async (fdcid: number) => {
 };
 
 
-export const deleteFood = async (fdcid: number) => {
-  try {
-    // Make a DELETE request to remove the food item
-    await axios.delete(`https://api.nal.usda.gov/fdc/v1/food/:${fdcid}`, {
-      headers: {
-        'Accept': '*/*',
-        'Host': 'https://api.nal.usda.gov',
-        'Content-Type': 'application/json',
-      },
-    });
-  } catch (error) {
-    console.error('Error deleting food:', error);
-    // Throw a user-friendly error message
-    throw new Error('Failed to delete food. Please try again later.');
-  }
-};
+
