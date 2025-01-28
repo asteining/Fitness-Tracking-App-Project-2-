@@ -1,42 +1,34 @@
 import { DataTypes, type Sequelize, Model, type Optional } from 'sequelize';
 
 interface FoodAttributes {
-  id: number;
-  Servings: number;
-  Calories: number;
+  fdcid: number; // Food Data Central ID
+  Nutrients: number; // Calories value
 }
 
-interface FoodCreationAttributes extends Optional<FoodAttributes, 'id'> {}
+interface FoodCreationAttributes extends Optional<FoodAttributes, 'fdcid'> {}
 
 export class Food
   extends Model<FoodAttributes, FoodCreationAttributes>
   implements FoodAttributes
 {
-  public id!: number;
-  public Servings!: number;
-  public Calories!: number;
+  public fdcid!: number; // FDC ID (Primary Key)
+  public Nutrients!: number; // Calories value
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-
 }
 
 export function FoodFactory(sequelize: Sequelize): typeof Food {
   Food.init(
     {
-      id: {
+      fdcid: {
         type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      Servings: {
-        type: DataTypes.INTEGER,
+        primaryKey: true, // Mark as primary key
         allowNull: false,
       },
-      Calories: {
+      Nutrients: {
         type: DataTypes.INTEGER,
         allowNull: false,
-    
       },
     },
     {
