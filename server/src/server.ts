@@ -5,7 +5,7 @@ import sequelize from './config/connection.js';
 import routes from './routes/index.js';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000;
 
 
 // Serves static files in the entire client's dist folder
