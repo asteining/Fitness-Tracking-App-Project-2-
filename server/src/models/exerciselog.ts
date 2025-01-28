@@ -7,7 +7,7 @@ interface ExerciseAttributes {
   caloriesBurned: number;
 }
 
-interface ExerciseCreationAttributes extends Optional<ExerciseAttributes, 'activity'> {}
+interface ExerciseCreationAttributes extends Optional<ExerciseAttributes, 'id'> {}
 
 export class Exercise
   extends Model<ExerciseAttributes, ExerciseCreationAttributes>
@@ -26,7 +26,12 @@ export class Exercise
 export function ExerciseFactory(sequelize: Sequelize): typeof Exercise {
   Exercise.init(
     {
-      activity: {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      exerciseType: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -34,7 +39,10 @@ export function ExerciseFactory(sequelize: Sequelize): typeof Exercise {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      
+      caloriesBurned: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
     {
       tableName: 'exercises',
