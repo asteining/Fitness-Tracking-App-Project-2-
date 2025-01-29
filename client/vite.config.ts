@@ -8,12 +8,12 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'https://fitness-tracking-app-project-2.onrender.com/',
         changeOrigin: true,
         secure: false,
       },
       '/auth': {
-        target: 'http://localhost:3001',
+        target: 'https://fitness-tracking-app-project-2.onrender.com/',
         changeOrigin: true,
         secure: false,
       },
