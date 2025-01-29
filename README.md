@@ -17,16 +17,25 @@ This application allows users to retrieve and display nutritional information ab
 
 # Features
 Fetch nutritional data for a food item using its FDC ID.
-Displays key details, including calories, macronutrients, and other important nutritional information.
-Handles missing or null values gracefully.
+Fetch exercise data from API Ninjas
+Displays the amount of calories per serving
+Displays the amount of calories burned per hour of exercise performed
+Handles missing or null values
 Provides error messages if the API call fails.
-Open the app in your browser at http://localhost:3000.
+Open the app in your browser at http://localhost:10000.
 
 # Usage
-Enter an FDC ID in the input field.
-Click the "Fetch Data" button.
+Enter a valid FDC ID from the list below into the input field:
+ - 1662353: Chicken
+ - 168727: Steak
+ - 167827: Pork 
+ - 1102647: Apples
+ - Broccoli: 1102674
+ - Rice: 1102047
+Click the "Search" button.
 View the nutritional information for the food item.
 If the data is unavailable or the FDC ID is invalid, an appropriate error message will be displayed.
+For Exercise API search, simply type in the name of the exercise you wish to enter. 
 
 # Future Enhancements
 - Search by Food Name: Add functionality to search by food name instead of FDC ID.
@@ -44,4 +53,4 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 # Links
 - https://github.com/asteining/Fitness-Tracking-App-Project-2-
-- 
+- https://fitness-tracking-app-project-2.onrender.com/
