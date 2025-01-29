@@ -3,17 +3,17 @@ import { defineConfig } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    port: 10000,
+    port: 3000,
     open: true,
     host: '0.0.0.0',
     proxy: {
       '/api': {
-        target: 'http://localhost:10000',
+        target: 'https://fitness-tracking-app-project-2.onrender.com/',
         changeOrigin: true,
         secure: false,
       },
       '/auth': {
-        target: 'http://localhost:10000',
+        target: 'https://fitness-tracking-app-project-2.onrender.com/',
         changeOrigin: true,
         secure: false,
       },
